@@ -3,6 +3,7 @@ require 'spec_helper'
 require "shoulda-matchers"
 require "factory_bot"
 require 'support/database_cleaner'
+require "faker"
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)

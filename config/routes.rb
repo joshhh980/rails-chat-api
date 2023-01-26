@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :chatrooms, only: :index
       get :chatroom, to: "chatrooms#show"
+      resources :messages, only: :create
       resources :users
+      #mount ActionCable.server => "/cable"
     end
   end
 end

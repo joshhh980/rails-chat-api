@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       get :chatroom, to: "chatrooms#show"
       resources :messages, only: :create
       resources :users
-      #mount ActionCable.server => "/cable"
+      mount ActionCable.server => "/cable"
     end
   end
 end

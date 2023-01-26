@@ -13,6 +13,10 @@ module Api
           user_id: current_user.id,
           body: params[:body],
         })
+        user = User.find(params[:user_id])
+        UserChannel.broadcast_to(user,
+                                     message: @message,
+                                     user_id: user.id)
         render "api/v1/messages/show.json.jbuilder"
       end
     end

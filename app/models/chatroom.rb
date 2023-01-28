@@ -15,4 +15,9 @@ class Chatroom < ApplicationRecord
     chatroom_user = chatrooms.map { |chatroom| chatroom.chatroom_users.where(user_id: other_user.id).first }[0]
     chatroom = chatroom_user ? chatroom_user.chatroom : nil
   end
+
+  def unread_messages_count
+    messages.unread.count
+  end
+
 end

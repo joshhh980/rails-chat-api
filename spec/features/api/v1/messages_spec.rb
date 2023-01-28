@@ -16,7 +16,6 @@ RSpec.shared_examples "broadcast" do
       :message => message,
     })
   end
-
 end
 
 RSpec.describe Api::V1::MessagesController, type: :request do
@@ -63,7 +62,6 @@ RSpec.describe Api::V1::MessagesController, type: :request do
     end
 
     context "chatroom" do
-
       before(:each) do
         chatroom = Chatroom::create()
         chatroom.chatroom_users.create(user: current_user)
@@ -72,12 +70,10 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
 
       it "creates message" do
-
         expect(response.body).to eq(@expected)
       end
 
       include_examples "broadcast", "offline"
-
     end
 
     context "no chatroom" do
@@ -92,6 +88,37 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
 
       include_examples "broadcast", "offline"
+    end
+  end
+
+  describe "#read" do
+    before(:each) do
+      allow(UserChannel).to receive(:broadcast_to)
+      allow(ChatroomsChannel).to receive(:broadcast_to)
+      @expected = expected.to_json
+    end
+
+    context "chatroom" do
+      before(:each) do
+        chatroom = Chatroom::create()
+        chatroom.chatroom_users.create(user: current_user)
+        chatroom.chatroom_users.create(user: another_user)
+        message = chatroom.messages.create({
+          body: "Message",
+          user: another_user,
+        })
+        put api_v1_messages_read_path,
+             headers: token,
+             params: {
+              user_id: another_user.id
+             }
+      end
+
+      it "updates message read state" do
+        message = Message.first
+        expect(message.read).to eq(true)
+      end
+
     end
   end
 end

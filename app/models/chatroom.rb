@@ -16,8 +16,16 @@ class Chatroom < ApplicationRecord
     chatroom = chatroom_user ? chatroom_user.chatroom : nil
   end
 
+  def unread_messages
+    messages.unread
+  end
+
   def unread_messages_count
-    messages.unread.count
+    unread_messages.count
+  end
+
+  def other_user_unread_messages current_user
+    unread_messages.where(user_id: other_user(current_user))
   end
 
 end

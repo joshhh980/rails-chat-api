@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :chatrooms, only: :index
       get :chatroom, to: "chatrooms#show"
       resources :messages, only: :create
+      put "messages/read", to: "messages#read"
       resources :users
       mount ActionCable.server => "/cable"
     end

@@ -22,6 +22,15 @@ module Api
                                       user_id: user.id)
         render "api/v1/messages/show.json.jbuilder"
       end
+
+      def read
+        user_id = params[:user_id]
+        user = User.find(user_id)
+        chatroom = Chatroom.between(current_user, user)
+        chatroom.unread_messages
+          .where(user_id: user.id)
+          .update({ read: true })
+      end
     end
   end
 end

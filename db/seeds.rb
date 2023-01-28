@@ -18,3 +18,9 @@ User.create({
     email: "anotheruser@mail.com",
     password: "password",
 })
+
+User.create({
+    name: "Another User 2",
+    email: "anotheruser2@mail.com",
+    password: "password",
+})

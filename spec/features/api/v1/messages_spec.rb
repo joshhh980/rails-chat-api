@@ -1,13 +1,22 @@
 require "rails_helper"
 
 RSpec.shared_examples "broadcast" do
-  it "broadcasts to user channel" do
+  it "broadcasts to user chatrooms channel" do
+    chatroom = Chatroom.first
+    expect(ChatroomsChannel).to have_received(:broadcast_to).with("chatrooms-#{another_user.id}", {
+      :user_id => another_user.id,
+      :chatroom => chatroom,
+    })
+  end
+
+  it "broadcasts to user" do
     message = Message.first
     expect(UserChannel).to have_received(:broadcast_to).with(another_user, {
       :user_id => another_user.id,
       :message => message,
     })
   end
+
 end
 
 RSpec.describe Api::V1::MessagesController, type: :request do
@@ -49,6 +58,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
   describe "#create" do
     before(:each) do
       allow(UserChannel).to receive(:broadcast_to)
+      allow(ChatroomsChannel).to receive(:broadcast_to)
       @expected = expected.to_json
     end
 
